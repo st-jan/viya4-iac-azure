@@ -21,7 +21,7 @@ resource "azurerm_container_registry" "acr" {
 resource "azurerm_network_security_rule" "acr" {
   name                        = "SAS-ACR"
   description                 = "Allow ACR from source"
-  count                       = (length(var.public_access_cidrs) != 0 && var.create_container_registry) ? 1 : 0
+  count                       = (length(var.public_access_cidrs) != 0) ? 1 : 0
   priority                    = 180
   direction                   = "Inbound"
   access                      = "Allow"
@@ -52,7 +52,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "acr" {
 
 resource "azurerm_private_endpoint" "acr" {
   count = var.public_access_enabled ? 1 : 0
-  
+
   name                = format("%s%s", azurerm_container_registry.acr.name, "-private-endpoint")
   resource_group_name = var.resource_group_name
   location            = var.location
