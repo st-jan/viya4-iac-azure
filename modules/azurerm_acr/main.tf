@@ -51,6 +51,8 @@ resource "azurerm_private_dns_zone_virtual_network_link" "acr" {
 }
 
 resource "azurerm_private_endpoint" "acr" {
+  count = var.public_access_enabled ? 1 : 0
+  
   name                = format("%s%s", azurerm_container_registry.acr.name, "-private-endpoint")
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -70,7 +72,7 @@ resource "azurerm_private_endpoint" "acr" {
     name = format("%s%s", azurerm_container_registry.acr.name, "-private-dns-zone-group")
     
     private_dns_zone_ids = [
-      azurerm_private_dns_zone.acr.id
+      azurerm_private_dns_zone.acr[0].id
     ]  
   }
  
