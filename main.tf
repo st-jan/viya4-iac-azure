@@ -91,40 +91,7 @@ module "vnet" {
   tags                = var.tags
 }
 
-resource "azurerm_container_registry" "acr" {
-  count               = var.create_container_registry ? 1 : 0
-  name                = join("", regexall("[a-zA-Z0-9]+", "${var.prefix}acr")) # alpha numeric characters only are allowed
-  resource_group_name = local.aks_rg.name
-  location            = var.location
-  sku                 = local.container_registry_sku
-  admin_enabled       = var.container_registry_admin_enabled
 
-  dynamic "georeplications" {
-    for_each = (local.container_registry_sku == "Premium" && var.container_registry_geo_replica_locs != null) ? toset(
-    var.container_registry_geo_replica_locs) : []
-    content {
-      location = georeplications.key
-      tags     = var.tags
-    }
-  }
-  tags = var.tags
-}
-
-resource "azurerm_network_security_rule" "acr" {
-  name                        = "SAS-ACR"
-  description                 = "Allow ACR from source"
-  count                       = (length(local.acr_public_access_cidrs) != 0 && var.create_container_registry) ? 1 : 0
-  priority                    = 180
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "5000"
-  source_address_prefixes     = local.acr_public_access_cidrs
-  destination_address_prefix  = "*"
-  resource_group_name         = local.nsg_rg_name
-  network_security_group_name = local.nsg.name
-}
 
 module "aks" {
   source = "./modules/azure_aks"
@@ -250,6 +217,26 @@ module "netapp" {
   tags                = var.tags
   allowed_clients     = concat(module.vnet.subnets["aks"].address_prefixes, module.vnet.subnets["misc"].address_prefixes)
   depends_on          = [module.vnet]
+}
+
+module "acr" {
+  source = "./modules/azurerm_acr"
+  count  = var.create_container_registry ? 1 : 0
+
+  prefix                = var.prefix
+  resource_group_name   = local.aks_rg.name
+  location              = var.location
+  vnet_name             = module.vnet.name
+  virtual_network_id    = module.vnet.id
+  subnet_id             = module.vnet.subnets["aks"].id
+  nsg_name              = var.nsg_name 
+  sku                   = var.container_registry_sku
+  admin_enabled         = var.container_registry_admin_enabled
+  public_access_enabled = var.container_registry_public_access_enabled
+  geo_replica_locs      = var.container_registry_geo_replica_logs
+  public_access_cidrs   = var.acr_public_access_cidrs
+  tags                  = var.tags
+  depends_on            = [module.vnet]
 }
 
 data "external" "git_hash" {

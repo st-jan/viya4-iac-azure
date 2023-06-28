@@ -427,6 +427,12 @@ variable "container_registry_geo_replica_locs" {
   default     = null
 }
 
+variable "container_registry_public_access_enabled" {
+  description = "Specifies whether the registry has public network access enabled. Defaults to `true`."
+  type       = bool
+  default     = true
+}
+
 # Azure NetApp Files
 variable "netapp_service_level" {
   description = "When storage_type=ha, The target performance of the file system. Valid values include Premium, Standard, or Ultra"
