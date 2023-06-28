@@ -45,7 +45,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "acr" {
   count = var.public_access_enabled ? 1 : 0
 
   name                  = join("", regexall("[a-zA-Z0-9]+", "${var.prefix}acr"))
-  private_dns_zone_name = azurerm_private_dns_zone.acr.name
+  private_dns_zone_name = azurerm_private_dns_zone.acr[0].name
   virtual_network_id    = var.virtual_network_id
   resource_group_name   = var.resource_group_name
 }
