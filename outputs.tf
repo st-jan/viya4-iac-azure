@@ -65,23 +65,23 @@ output "nfs_admin_username" {
 
 # acr
 output "cr_name" {
-  value = var.create_container_registry ? module.acr.name : null
+  value = var.create_container_registry ? module.acr[0].name : null
 }
 
 output "cr_id" {
-  value = var.create_container_registry ? module.acr.id : null
+  value = var.create_container_registry ? module.acr[0].id : null
 }
 
 output "cr_endpoint" {
-  value = var.create_container_registry ? module.acr.login_server : null
+  value = var.create_container_registry ? module.acr[0].login_server : null
 }
 
 output "cr_admin_user" {
-  value = (var.create_container_registry && var.container_registry_admin_enabled) ? module.acr.admin_username : null
+  value = (var.create_container_registry && var.container_registry_admin_enabled) ? module.acr[0].admin_username : null
 }
 
 output "cr_admin_password" {
-  value     = (var.create_container_registry && var.container_registry_admin_enabled) ? module.acr.admin_password : null
+  value     = (var.create_container_registry && var.container_registry_admin_enabled) ? module.acr[0].admin_password : null
   sensitive = true
 }
 
