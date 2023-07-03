@@ -1,6 +1,6 @@
 resource "azurerm_container_registry" "acr" {
 
-  name                = join("", regexall("[a-zA-Z0-9]+", "${var.prefix}acr")) # alpha numeric characters only are allowed
+  name                = var.name # alpha numeric characters only are allowed
   resource_group_name = var.resource_group_name
   location            = var.location
   sku                 = var.sku

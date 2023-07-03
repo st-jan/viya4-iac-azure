@@ -6,6 +6,11 @@ variable "prefix" {
   type        = string
 }
 
+variable "name" {
+  description = "The name to assign to the acr."
+  type        = string
+}
+
 variable "resource_group_name" {
   description = "The name of the resource group in which to create Azure NetApp Files storage"
   type        = string

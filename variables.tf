@@ -409,6 +409,12 @@ variable "create_container_registry" {
   default     = false
 }
 
+variable "container_registry_name" {
+  description = "The  name of the container registry. Only alfanumeric characters are allowed."
+  type        = string
+  default     = join("", regexall("[a-zA-Z0-9]+", "${var.prefix}acr"))
+}
+
 variable "container_registry_sku" {
   description = "The SKU name of the container registry. Possible values are `Basic`, `Standard` and `Premium`."
   type        = string

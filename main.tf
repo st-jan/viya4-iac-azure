@@ -224,6 +224,7 @@ module "acr" {
   count  = var.create_container_registry ? 1 : 0
 
   prefix                = var.prefix
+  name                  = var.container_registry_name
   resource_group_name   = local.aks_rg.name
   location              = var.location
   vnet_name             = module.vnet.name
