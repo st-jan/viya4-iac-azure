@@ -223,21 +223,22 @@ module "acr" {
   source = "./modules/azurerm_acr"
   count  = var.create_container_registry ? 1 : 0
 
-  prefix                = var.prefix
-  name                  = var.container_registry_name
-  resource_group_name   = local.aks_rg.name
-  location              = var.location
-  vnet_name             = module.vnet.name
-  virtual_network_id    = module.vnet.id
-  subnet_id             = module.vnet.subnets["aks"].id
-  nsg_name              = var.nsg_name 
-  sku                   = var.container_registry_sku
-  admin_enabled         = var.container_registry_admin_enabled
-  public_access_enabled = var.container_registry_public_access_enabled
-  geo_replica_locs      = var.container_registry_geo_replica_locs
-  public_access_cidrs   = local.acr_public_access_cidrs
-  tags                  = var.tags
-  depends_on            = [module.vnet]
+  prefix                      = var.prefix
+  name                        = var.container_registry_name
+  resource_group_name         = local.aks_rg.name
+  network_resource_group_name = local.network_rg.name
+  location                    = var.location
+  vnet_name                   = module.vnet.name
+  virtual_network_id          = module.vnet.id
+  subnet_id                   = module.vnet.subnets["aks"].id
+  nsg_name                    = var.nsg_name 
+  sku                         = var.container_registry_sku
+  admin_enabled               = var.container_registry_admin_enabled
+  public_access_enabled       = var.container_registry_public_access_enabled
+  geo_replica_locs            = var.container_registry_geo_replica_locs
+  public_access_cidrs         = local.acr_public_access_cidrs
+  tags                        = var.tags
+  depends_on                  = [module.vnet]
 }
 
 data "external" "git_hash" {

@@ -30,7 +30,7 @@ resource "azurerm_network_security_rule" "acr" {
   destination_port_range      = "5000"
   source_address_prefixes     = var.public_access_cidrs
   destination_address_prefix  = "*"
-  resource_group_name         = var.resource_group_name
+  resource_group_name         = var.network_resource_group_name
   network_security_group_name = var.nsg_name
 }
 
@@ -38,7 +38,7 @@ resource "azurerm_private_dns_zone" "acr" {
   count = var.public_access_enabled ? 0 : 1
 
   name                = "privatelink.azurecr.io"
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.network_resource_group_name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "acr" {
@@ -47,14 +47,14 @@ resource "azurerm_private_dns_zone_virtual_network_link" "acr" {
   name                  = join("", regexall("[a-zA-Z0-9]+", "${var.prefix}acr"))
   private_dns_zone_name = azurerm_private_dns_zone.acr[0].name
   virtual_network_id    = var.virtual_network_id
-  resource_group_name   = var.resource_group_name
+  resource_group_name   = var.network_resource_group_name
 }
 
 resource "azurerm_private_endpoint" "acr" {
   count = var.public_access_enabled ? 0 : 1
 
   name                = format("%s%s", azurerm_container_registry.acr.name, "-private-endpoint")
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.network_resource_group_name
   location            = var.location
   subnet_id           = var.subnet_id
   tags                = var.tags

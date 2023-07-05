@@ -12,7 +12,12 @@ variable "name" {
 }
 
 variable "resource_group_name" {
-  description = "The name of the resource group in which to create Azure NetApp Files storage"
+  description = "The name of the resource group in which to create the Azure Container Registry"
+  type        = string
+}
+
+variable "network_resource_group_name" {
+  description = "The name of the resource group in which to create network related resources"
   type        = string
 }
 
