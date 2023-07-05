@@ -35,14 +35,14 @@ resource "azurerm_network_security_rule" "acr" {
 }
 
 resource "azurerm_private_dns_zone" "acr" {
-  count = var.public_access_enabled ? 1 : 0
+  count = var.public_access_enabled ? 0 : 1
 
   name                = "privatelink.azurecr.io"
   resource_group_name = var.resource_group_name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "acr" {
-  count = var.public_access_enabled ? 1 : 0
+  count = var.public_access_enabled ? 0 : 1
 
   name                  = join("", regexall("[a-zA-Z0-9]+", "${var.prefix}acr"))
   private_dns_zone_name = azurerm_private_dns_zone.acr[0].name
@@ -51,7 +51,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "acr" {
 }
 
 resource "azurerm_private_endpoint" "acr" {
-  count = var.public_access_enabled ? 1 : 0
+  count = var.public_access_enabled ? 0 : 1
 
   name                = format("%s%s", azurerm_container_registry.acr.name, "-private-endpoint")
   resource_group_name = var.resource_group_name
