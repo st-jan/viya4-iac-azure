@@ -80,3 +80,10 @@ resource "azurerm_private_endpoint" "acr" {
     azurerm_container_registry.acr
   ]
 }
+
+resource "azurerm_role_assignment" "akspull" {
+  principal_id                     = var.aks_principal_id
+  role_definition_name             = "AcrPull"
+  scope                            = azurerm_container_registry.acr.id
+  skip_service_principal_aad_check = true
+}

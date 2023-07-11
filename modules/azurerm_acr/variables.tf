@@ -80,6 +80,11 @@ variable "nsg_name" {
   type        = string
 }
 
+variable "aks_principal_id" {
+  description = "Principal id used by the AKS cluster that needs to be granted Pull permissions"
+  type        = string
+}
+
 
 
 
