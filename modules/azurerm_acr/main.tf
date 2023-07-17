@@ -83,8 +83,19 @@ resource "azurerm_private_endpoint" "acr" {
   ]
 }
 
-resource "azurerm_role_assignment" "akspull" {
+data "azuread_application" "aks_node_pool" {
+  display_name = "${var.prefix}-aks-agentpool"
+}
+
+resource "azurerm_role_assignment" "controlplane_akspull" {
   principal_id                     = var.aks_principal_id
+  role_definition_name             = "AcrPull"
+  scope                            = azurerm_container_registry.acr.id
+  skip_service_principal_aad_check = true
+}
+
+resource "azurerm_role_assignment" "nodepool_akspull" {
+  principal_id                     = data.azuread_application.aks_node_pool.object_id
   role_definition_name             = "AcrPull"
   scope                            = azurerm_container_registry.acr.id
   skip_service_principal_aad_check = true
