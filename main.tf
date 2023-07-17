@@ -237,7 +237,7 @@ module "acr" {
   public_access_enabled       = var.container_registry_public_access_enabled
   geo_replica_locs            = var.container_registry_geo_replica_locs
   public_access_cidrs         = local.acr_public_access_cidrs
-  aks_principal_id            = local.aks_uai_id
+  aks_principal_id            = local.aks_uai_principal_id
   tags                        = var.tags
   depends_on                  = [module.vnet]
 }
