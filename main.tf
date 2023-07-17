@@ -24,6 +24,12 @@ provider "azuread" {
   tenant_id     = var.tenant_id
 }
 
+provider "azuread_application" {
+  client_id     = var.client_id
+  client_secret = var.client_secret
+  tenant_id     = var.tenant_id
+}
+
 provider "kubernetes" {
   host                   = module.aks.host
   client_key             = base64decode(module.aks.client_key)
