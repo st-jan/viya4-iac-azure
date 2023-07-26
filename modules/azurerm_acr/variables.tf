@@ -85,6 +85,11 @@ variable "aks_principal_id" {
   type        = string
 }
 
+variable "aks_kubelet_principal_id" {
+  description = "Principal id used by the AKS cluster kubelets that needs to be granted Pull permissions"
+  type        = string
+}
+
 
 
 

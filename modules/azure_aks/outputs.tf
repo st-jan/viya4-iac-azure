@@ -37,6 +37,10 @@ output "cluster_public_ip" {
   value = var.cluster_egress_type == "loadBalancer" ? data.azurerm_public_ip.cluster_public_ip[0].ip_address : null
 }
 
+output "kubelet_identity" {
+  value = azurerm_kubernetes_cluster.aks.kubelet_identity
+}
+
 output "name" {
   value = azurerm_kubernetes_cluster.aks.name
 }

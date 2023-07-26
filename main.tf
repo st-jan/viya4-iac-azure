@@ -239,6 +239,7 @@ module "acr" {
   geo_replica_locs            = var.container_registry_geo_replica_locs
   public_access_cidrs         = local.acr_public_access_cidrs
   aks_principal_id            = local.aks_uai_principal_id
+  aks_kubelet_principal_id    = module.aks.kubelet_identity.object_id
   tags                        = var.tags
   depends_on                  = [module.vnet]
 }
