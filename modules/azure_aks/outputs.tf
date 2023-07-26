@@ -38,7 +38,7 @@ output "cluster_public_ip" {
 }
 
 output "kubelet_identity" {
-  value = azurerm_kubernetes_cluster.aks.kubelet_identity
+  value = azurerm_kubernetes_cluster.aks.kubelet_identity[0]
 }
 
 output "name" {
